@@ -105,3 +105,57 @@ body {
       width: 100%;
     }
   }
+  #task-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  #task-input,
+  #search-input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+  
+  #task-form button,
+  .delete-btn {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  #task-form button {
+    background-color: blueviolet;
+    color: white;
+  }
+  
+  .delete-btn {
+    background-color: crimson;
+    color: white;
+  }
+  
+  #task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    background-color: #2a2a2a;
+    color: white;
+    border-radius: 10px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .task-card:hover {
+    transform: translateY(-3px);
+    background-color: #3a3a3a;
+  }
