@@ -1,0 +1,107 @@
+:root {
+    /* Colores */
+    --color-fondo: #0f0f0f;
+    --color-header: blueviolet;
+    --color-texto: #ffffff;
+    --color-panel: #1c1c1c;
+    --color-tarjeta: #2a2a2a;
+    
+  
+    /*  Fuente */
+    --fuente-principal: Arial, sans-serif;
+  
+    /* Espaciado */
+    --espacio-peque: 8px;
+    --espacio-normal: 16px;
+    --espacio-grande: 24px;
+  
+    /* Bordes */
+    --radio: 10px;
+}
+body {
+    margin: 0;
+    font-family: var(--fuente-principal);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+  }
+  .titulogrande {
+    background-color: var(--color-header);
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .contenedor {
+    display: flex;
+    gap: var(--espacio-grande);
+    padding: var(--espacio-normal);
+  }
+  .lista {
+    background-color: var(--color-tarjeta);
+    padding: var(--espacio-normal);
+    border-radius: var(--radio);
+  }
+  .lista {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: var(--color-tarjeta);
+    border-radius: 10px;
+  }
+  .lista h3 {
+    margin-right: auto;
+  }
+  .genero {
+    background-color: rgb(210, 12, 12);
+    color: rgb(4, 4, 4);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  
+  .prioridad.alta {
+    background-color: rgb(64, 255, 0);
+    color: rgb(4, 4, 4);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  .prioridad.media {
+    background-color: rgb(20, 9, 246);
+    color: rgb(4, 4, 4);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  .prioridad.baja {
+    background-color: rgb(255, 247, 0);
+    color: rgb(4, 4, 4);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+  .lista {
+    background-color: var(--color-tarjeta);
+    padding: 16px;
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+  .lista:hover {
+    transform: translateY(-5px);
+    background-color: #3a3a3a;
+  }
+  
+  @media (max-width: 768px) {
+    .contenedor {
+      flex-direction: column;
+    }
+  
+    aside {
+      width: 100%;
+    }
+  
+    main {
+      width: 100%;
+    }
+  }
