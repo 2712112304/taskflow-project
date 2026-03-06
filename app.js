@@ -5,7 +5,7 @@ const searchInput = document.getElementById("search-input");
 
 let tasks = [];
 
-/* Cargar tareas guardadas al iniciar */
+/* Cargar titulos guardados al abrir la página */
 const savedTasks = localStorage.getItem("tasks");
 
 if (savedTasks) {
@@ -13,7 +13,7 @@ if (savedTasks) {
   renderTasks();
 }
 
-/* Escuchar el envío del formulario */
+/* Escuchar el formulario */
 taskForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -32,7 +32,7 @@ searchInput.addEventListener("input", function () {
   renderTasks(searchInput.value);
 });
 
-/* Añadir tarea */
+/* Añadir titulo */
 function addTask(text) {
   const task = {
     id: Date.now(),
@@ -44,7 +44,7 @@ function addTask(text) {
   renderTasks(searchInput.value);
 }
 
-/* Borrar tarea */
+/* Borrar titulo */
 function deleteTask(id) {
   tasks = tasks.filter(function (task) {
     return task.id !== id;
@@ -59,7 +59,7 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-/* Pintar tareas en pantalla */
+/* Pintar titulo */
 function renderTasks(searchText = "") {
   taskList.innerHTML = "";
 
