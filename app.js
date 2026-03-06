@@ -88,3 +88,28 @@ function renderTasks(searchText = "") {
     taskList.appendChild(article);
   });
 }
+const themeToggleBtn = document.getElementById("theme-toggle");
+
+function setTheme(isDark) {
+  document.documentElement.classList.toggle("dark", isDark);
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
+(function initTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved) {
+    setTheme(saved === "dark");
+  } else {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(prefersDark);
+  }
+})();
+
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(!isDark);
+  });
+}
