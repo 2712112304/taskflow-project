@@ -54,59 +54,86 @@
       <!-- PANEL Titulos -->
       <section class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
         <h2 class="mb-4 text-lg font-semibold">Titulos</h2>
-
+      
         <form id="task-form" class="flex flex-col gap-2 sm:flex-row">
-
-            <input id="task-input" type="text" placeholder="Añade un Titulo"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
-              focus:outline-none focus:ring-2 focus:ring-violet-400
-              dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 transition" >
-          
-            <!-- GENERO -->
-            <select id="category-select"
-              class="rounded-lg border border-slate-300 bg-violet-500 px-3 py-2 text-sm">
-              <option value="Shooter">Shooter</option>
-              <option value="RPG">RPG</option>
-              <option value="Aventura">Aventura</option>
-              <option value="Carreras">Carreras</option>
-            </select>
-          
-            <!-- PLATAFORMA -->
-            <select id="platform-select"
-              class="rounded-lg border border-slate-300 bg-violet-500 px-3 py-2 text-sm">
-              <option value="Multi">Multi</option>
-              <option value="PC">PC</option>
-              <option value="PS4">PS4</option>
-            </select>
-          
-            <!-- PRIORIDAD -->
-            <select id="priority-select"
-              class="rounded-lg border border-slate-300 bg-violet-500 px-3 py-2 text-sm">
-              <option value="Muy bueno">Muy Bueno</option>
-              <option value="Bueno">Bueno</option>
-              <option value="Medio">Medio</option>
-            </select>
-          
-            <button type="submit"
-              class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white">
-              Añadir
-            </button>
-          
-          </form>
-        <input id="search-input" type="text" placeholder="Buscar Titulos..."
+          <input
+            id="task-input"
+            type="text"
+            placeholder="Añade un Titulo"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+            focus:outline-none focus:ring-2 focus:ring-violet-400
+            dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 transition"
+          >
+      
+          <select
+            id="category-select"
+            class="rounded-lg border border-slate-300 bg-violet-500 px-3 py-2 text-sm text-white"
+          >
+            <option value="Shooter">Shooter</option>
+            <option value="RPG">RPG</option>
+            <option value="Aventura">Aventura</option>
+            <option value="Carreras">Carreras</option>
+          </select>
+      
+          <select
+            id="platform-select"
+            class="rounded-lg border border-slate-300 bg-violet-500 px-3 py-2 text-sm text-white"
+          >
+            <option value="Multi">Multi</option>
+            <option value="PC">PC</option>
+            <option value="PS4">PS4</option>
+          </select>
+      
+          <select
+            id="priority-select"
+            class="rounded-lg border border-slate-300 bg-violet-500 px-3 py-2 text-sm text-white"
+          >
+            <option value="Muy bueno">Muy Bueno</option>
+            <option value="Bueno">Bueno</option>
+            <option value="Medio">Medio</option>
+          </select>
+      
+          <button
+            type="submit"
+            class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700 transition"
+          >
+            Añadir
+          </button>
+        </form>
+      
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Buscar Titulos..."
           class="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
                  focus:outline-none focus:ring-2 focus:ring-violet-400
-                 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 transition" >
-
-        <!-- Aquí se pintarán los títulos con JS -->
-        <section id="task-list" class="mt-4 space-y-2">
-          <h2 class="text-lg font-semibold">Lista de juegos</h2>
-        </section>
+                 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 transition"
+        >
+      
+        <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+          <button
+            type="button"
+            id="mark-all-viewed-btn"
+            class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700 transition"
+          >
+            Marcar todos como vistos
+          </button>
+      
+          <button
+            type="button"
+            id="clear-all-btn"
+            class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition"
+          >
+            Borrar todos
+          </button>
+        </div>
+      
+        <div id="task-list" class="mt-4 space-y-2"></div>
       </section>
 
       <!-- CATÁLOGO ANTIGUO -->
-      <section id="default-games" class="space-y-2">
-        <h2 class="text-lg font-semibold">Juegos por defecto</h2>
+      <div id="default-games" class="space-y-2">
+       
         <!-- Shooter -->
         <article class="default-game flex items-center gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:shadow-md transition dark:bg-slate-900 dark:ring-slate-800">
           <h3 class="mr-auto font-semibold">Bioshock the collection</h3>
@@ -202,7 +229,7 @@
           <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-100">Medio</span>
         </article>
 
-      </section>
+      </div>
 
     </main>
   </div>

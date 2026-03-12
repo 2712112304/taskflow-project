@@ -9,6 +9,9 @@ const filterButtons = document.querySelectorAll(".filter-btn");
 const themeToggleBtn = document.getElementById("theme-toggle");
 const defaultGamesContainer = document.getElementById("default-games");
 
+const markAllViewedBtn = document.getElementById("mark-all-viewed-btn");
+const clearAllBtn = document.getElementById("clear-all-btn");
+
 let tasks = [];
 let selectedCategory = "Todas";
 
@@ -22,6 +25,8 @@ taskForm.addEventListener("submit", function (event) {
 
   const text = taskInput.value.trim();
   const category = categorySelect.value;
+  const platform = platformSelect.value;
+  const rating = prioritySelect.value;
 
   if (text === "") return;
 
@@ -29,8 +34,9 @@ taskForm.addEventListener("submit", function (event) {
     id: Date.now(),
     text: text,
     category: category,
-    platform: platformSelect.value,
-    rating: prioritySelect.value
+    platform: platform,
+    rating: rating,
+    viewed: false,
   };
 
   tasks.push(newTask);
@@ -52,6 +58,20 @@ filterButtons.forEach(function (button) {
     renderTasks();
   });
 });
+
+/* Botón marcar todos como vistos */
+if (markAllViewedBtn) {
+  markAllViewedBtn.addEventListener("click", function () {
+    markAllAsViewed();
+  });
+}
+
+/* Botón borrar todos */
+if (clearAllBtn) {
+  clearAllBtn.addEventListener("click", function () {
+    clearAllTasks();
+  });
+}
 
 /* Inicializar tareas */
 function initTasks() {
@@ -89,7 +109,8 @@ function readGamesFromHtml() {
       text: title,
       category: category,
       platform: platform,
-      rating: rating
+      rating: rating,
+      viewed: false,
     });
   });
 
@@ -108,7 +129,7 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-/* Borrar */
+/* Borrar una */
 function deleteTask(id) {
   tasks = tasks.filter(function (task) {
     return task.id !== id;
@@ -118,34 +139,98 @@ function deleteTask(id) {
   renderTasks();
 }
 
-/* Estilos valoración */
+/* Editar título */
+function editTask(id) {
+  const taskToEdit = tasks.find(function (task) {
+    return task.id === id;
+  });
+
+  if (!taskToEdit) return;
+
+  const newTitle = prompt("Editar título:", taskToEdit.text);
+
+  if (newTitle === null) return;
+
+  const trimmedTitle = newTitle.trim();
+
+  if (trimmedTitle === "") return;
+
+  tasks = tasks.map(function (task) {
+    if (task.id === id) {
+      return {
+        ...task,
+        text: trimmedTitle,
+      };
+    }
+
+    return task;
+  });
+
+  saveTasks();
+  renderTasks();
+}
+
+/* Marcar una como vista */
+function toggleViewed(id) {
+  tasks = tasks.map(function (task) {
+    if (task.id === id) {
+      return {
+        ...task,
+        viewed: !task.viewed,
+      };
+    }
+
+    return task;
+  });
+
+  saveTasks();
+  renderTasks();
+}
+
+/* Marcar todas como vistas */
+function markAllAsViewed() {
+  if (tasks.length === 0) return;
+
+  tasks = tasks.map(function (task) {
+    return {
+      ...task,
+      viewed: true,
+    };
+  });
+
+  saveTasks();
+  renderTasks();
+}
+
+/* Borrar todas */
+function clearAllTasks() {
+  if (tasks.length === 0) return;
+
+  const confirmed = confirm("¿Seguro que quieres borrar todos los títulos?");
+
+  if (!confirmed) return;
+
+  tasks = [];
+  saveTasks();
+  renderTasks();
+}
+
+/* Clase de prioridad */
 function getPriorityClass(priority) {
-    if (priority === "Alta") {
-      return "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-100";
-    }
-  
-    if (priority === "Media") {
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-100";
-    }
-  
-    if (priority === "Baja") {
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-100";
-    }
-  
-    if (priority === "Muy bueno") {
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-100";
-    }
-  
-    if (priority === "Bueno") {
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-100";
-    }
-  
-    if (priority === "Medio") {
-      return "bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-100";
-    }
-  
-    return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-100";
+  if (priority === "Muy bueno") {
+    return "rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-100";
   }
+
+  if (priority === "Bueno") {
+    return "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-100";
+  }
+
+  if (priority === "Medio") {
+    return "rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-800 dark:bg-violet-900/40 dark:text-violet-100";
+  }
+
+  return "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-100";
+}
 
 /* Pintar */
 function renderTasks() {
@@ -173,10 +258,20 @@ function renderTasks() {
   filteredTasks.forEach(function (task) {
     const article = document.createElement("article");
     article.className =
-      "flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 sm:flex-row sm:items-center";
+      "flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:shadow-md transition dark:bg-slate-900 dark:ring-slate-800 sm:flex-row sm:items-center";
+
+    if (task.viewed) {
+      article.style.opacity = "0.6";
+    }
+
+    const titleStyle = task.viewed
+      ? 'style="text-decoration: line-through;"'
+      : "";
 
     article.innerHTML = `
-      <h3 class="mr-auto font-semibold">${task.text}</h3>
+      <h3 class="mr-auto font-semibold" ${titleStyle}>
+        ${task.text}
+      </h3>
 
       <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-100">
         ${task.category}
@@ -186,16 +281,43 @@ function renderTasks() {
         ${task.platform}
       </span>
 
-     <span class="rounded-full px-2.5 py-1 text-xs font-semibold ${getPriorityClass(task.rating)}">
+      <span class="${getPriorityClass(task.rating)}">
         ${task.rating}
-    </span>
+      </span>
 
-      <button class="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition">
+      <button
+        class="view-btn rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition"
+        type="button"
+      >
+        ${task.viewed ? "Visto" : "Marcar visto"}
+      </button>
+
+      <button
+        class="edit-btn rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition"
+        type="button"
+      >
+        Editar
+      </button>
+
+      <button
+        class="delete-btn rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition"
+        type="button"
+      >
         Borrar
       </button>
     `;
 
-    const deleteButton = article.querySelector("button");
+    const viewButton = article.querySelector(".view-btn");
+    const editButton = article.querySelector(".edit-btn");
+    const deleteButton = article.querySelector(".delete-btn");
+
+    viewButton.addEventListener("click", function () {
+      toggleViewed(task.id);
+    });
+
+    editButton.addEventListener("click", function () {
+      editTask(task.id);
+    });
 
     deleteButton.addEventListener("click", function () {
       deleteTask(task.id);
