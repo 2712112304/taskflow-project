@@ -41,9 +41,10 @@ taskForm.addEventListener("submit", function (event) {
 
   tasks.push(newTask);
   saveTasks();
-  renderTasks();
+  renderTasks(newTask.id);
 
   taskInput.value = "";
+  taskInput.focus();
 });
 
 /* Buscador */
@@ -129,14 +130,32 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-/* Borrar una */
+/* Borrar una con animación */
 function deleteTask(id) {
-  tasks = tasks.filter(function (task) {
-    return task.id !== id;
-  });
+  const article = taskList.querySelector(`[data-id="${id}"]`);
 
-  saveTasks();
-  renderTasks();
+  if (!article) {
+    tasks = tasks.filter(function (task) {
+      return task.id !== id;
+    });
+
+    saveTasks();
+    renderTasks();
+    return;
+  }
+
+  article.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+  article.style.opacity = "0";
+  article.style.transform = "translateY(-10px)";
+
+  setTimeout(function () {
+    tasks = tasks.filter(function (task) {
+      return task.id !== id;
+    });
+
+    saveTasks();
+    renderTasks();
+  }, 250);
 }
 
 /* Editar título */
@@ -233,7 +252,7 @@ function getPriorityClass(priority) {
 }
 
 /* Pintar */
-function renderTasks() {
+function renderTasks(highlightId = null) {
   taskList.innerHTML = "";
 
   const searchText = searchInput.value.toLowerCase();
@@ -257,15 +276,18 @@ function renderTasks() {
 
   filteredTasks.forEach(function (task) {
     const article = document.createElement("article");
+    article.dataset.id = task.id;
     article.className =
       "flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:shadow-md transition dark:bg-slate-900 dark:ring-slate-800 sm:flex-row sm:items-center";
 
     if (task.viewed) {
-      article.style.opacity = "0.6";
+      article.style.opacity = "0.75";
+    } else {
+      article.style.opacity = "1";
     }
 
     const titleStyle = task.viewed
-      ? 'style="text-decoration: line-through;"'
+      ? 'style="text-decoration: line-through; opacity: 0.85;"'
       : "";
 
     article.innerHTML = `
@@ -323,7 +345,25 @@ function renderTasks() {
       deleteTask(task.id);
     });
 
+    /* Animación al crear */
+    if (highlightId === task.id) {
+      article.style.opacity = "0";
+      article.style.transform = "translateY(10px)";
+      article.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+    }
+
     taskList.appendChild(article);
+
+    if (highlightId === task.id) {
+      requestAnimationFrame(function () {
+        if (task.viewed) {
+          article.style.opacity = "0.75";
+        } else {
+          article.style.opacity = "1";
+        }
+        article.style.transform = "translateY(0)";
+      });
+    }
   });
 }
 

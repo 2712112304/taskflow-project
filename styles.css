@@ -205,3 +205,39 @@ body {
     transform: translateY(-3px);
     background-color: #3a3a3a;
   }
+  /* Animaciones de tarjetas */
+.game-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.game-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.game-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.game-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Drag & drop */
+.draggable-item {
+  cursor: grab;
+}
+
+.draggable-item.dragging {
+  opacity: 0.45;
+}
+
+.draggable-item.drag-over {
+  outline: 2px dashed blueviolet;
+  outline-offset: 4px;
+}
