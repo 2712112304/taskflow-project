@@ -26,11 +26,7 @@ Un closure es cuando una función "recuerda" las variables del entorno donde fue
 Piénsalo así: es como si la función llevara una mochila con las variables que necesita, aunque ya no esté en el lugar donde nacieron.
 
 ### Comparación
-**Claridad:**  
-_Escribe aquí tu comparación._
 
-**Profundidad:**  
-_Escribe aquí tu comparación._
 
 **Ejemplos:**  
 _Escribe aquí tu comparación._
@@ -91,8 +87,6 @@ async/await es azúcar sintáctico sobre promesas: todo lo que está tras un awa
 Los setTimeout(..., 0) no son "inmediatos" — son simplemente macrotasks, y esperarán a que todas las microtasks pendientes terminen primero.
 
 **Ejemplo:**
-
-### Claude
 console.log('inicio');
 setTimeout(() => {
 console.log('timeout');
