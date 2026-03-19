@@ -62,24 +62,6 @@ Cuando la pila queda libre, el event loop mete la siguiente tarea pendiente en l
 4. cuando la pila queda vacía, el event loop mete la función del setTimeout
 5. se muestra "Timeout"
 
-El event loop funciona como un organizador:
-
-deja que primero termine el código normal
-
-espera a que la pila esté vacía
-
-luego ejecuta las tareas pendientes
-
-Frase para recordarlo
-
-El event loop mueve tareas pendientes a la pila cuando JavaScript termina lo que está haciendo.
-
-En una sola línea
-
-El event loop es el mecanismo que coordina cuándo se ejecutan las tareas asíncronas en JavaScript, sin interrumpir el código que se está ejecutando en ese momento.
-
-Te puedo hacer ahora un dibujo mental muy fácil con pila + cola + event loop para que se entienda en 30 segundos.
-
 ### Respuesta de Claude
 JavaScript es single-threaded, lo que significa que solo puede ejecutar una cosa a la vez. El event loop es el mecanismo que le permite manejar operaciones asíncronas sin bloquear el hilo principal.
 Hay cuatro componentes clave:Hay cuatro componentes clave que trabajan juntos:
@@ -101,7 +83,7 @@ Los setTimeout(..., 0) no son "inmediatos" — son simplemente macrotasks, y esp
 ### Comparación
 
 **Ejemplos:**
-# Chat GPT
+### Chat GPT
 
 console.log("Inicio");
 
@@ -111,7 +93,7 @@ setTimeout(() => {
 
 console.log("Fin");
 
-# Claude
+### Claude
 console.log('inicio');
 setTimeout(() => {
 console.log('timeout');
