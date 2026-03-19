@@ -45,45 +45,22 @@ _Escribe aquí cuál de los dos te ayudó más a entender closures y por qué._
 
 ### Respuesta de ChatGPT
 El event loop es el sistema que hace que JavaScript pueda manejar tareas asíncronas sin bloquearse.
-
-Idea sencilla
-
-JavaScript ejecuta una sola cosa a la vez.
-Para hacerlo usa una pila de ejecución (call stack).
-
-Cuando aparece una tarea que tarda, como:
-
-un setTimeout, una promesa, un clic
-
+JavaScript ejecuta una sola cosa a la vez. Para hacerlo usa una pila de ejecución (call stack).
+Cuando aparece una tarea que tarda, como: un setTimeout, una promesa, un clic.
 una petición a una API
-
 JavaScript no se queda esperando parado. En lugar de eso, la deja preparada para después y sigue con el resto del código.
+Ahí entra el event loop. Qué hace el event loop, El event loop está revisando constantemente dos cosas:
 
-Ahí entra el event loop.
+- si la pila de ejecución está vacía
+- si hay tareas pendientes para ejecutar
 
-Qué hace el event loop
+Cuando la pila queda libre, el event loop mete la siguiente tarea pendiente en la pila para que se ejecute. Por qué pasa eso
 
-El event loop está revisando constantemente dos cosas:
-
-si la pila de ejecución está vacía
-
-si hay tareas pendientes para ejecutar
-
-Cuando la pila queda libre, el event loop mete la siguiente tarea pendiente en la pila para que se ejecute.
-
-Por qué pasa eso
-
-se ejecuta console.log("Inicio")
-
-setTimeout no ejecuta su función al instante, la deja programada
-
-se ejecuta console.log("Fin")
-
-cuando la pila queda vacía, el event loop mete la función del setTimeout
-
-se muestra "Timeout"
-
-Resumen fácil
+1. se ejecuta console.log("Inicio")
+2. setTimeout no ejecuta su función al instante, la deja programada
+3. se ejecuta console.log("Fin")
+4. cuando la pila queda vacía, el event loop mete la función del setTimeout
+5. se muestra "Timeout"
 
 El event loop funciona como un organizador:
 
