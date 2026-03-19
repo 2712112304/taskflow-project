@@ -64,12 +64,13 @@ Cuando la pila queda libre, el event loop mete la siguiente tarea pendiente en l
 
 ### Respuesta de Claude
 JavaScript es single-threaded, lo que significa que solo puede ejecutar una cosa a la vez. El event loop es el mecanismo que le permite manejar operaciones asíncronas sin bloquear el hilo principal.
-Hay cuatro componentes clave:Hay cuatro componentes clave que trabajan juntos:
 
-Call Stack — donde se ejecuta el código síncrono, función por función.
-Web APIs — donde el navegador maneja operaciones asíncronas (timers, fetch, eventos DOM).
-Task Queue (Macrotasks) — cola de callbacks de setTimeout, setInterval, eventos del DOM.
-Microtask Queue — cola de alta prioridad para promesas (.then, async/await) y queueMicrotask.
+Hay cuatro componentes clave que trabajan juntos:
+
+1. Call Stack — donde se ejecuta el código síncrono, función por función.
+2. Web APIs — donde el navegador maneja operaciones asíncronas (timers, fetch, eventos DOM).
+3. Task Queue (Macrotasks) — cola de callbacks de setTimeout, setInterval, eventos del DOM.
+4. Microtask Queue — cola de alta prioridad para promesas (.then, async/await) y queueMicrotask.
 
 El event loop sigue este ciclo sin parar: ejecuta todo el código síncrono del call stack → vacía todas las microtasks → toma una macrotask → repite.
 
