@@ -62,6 +62,15 @@ Cuando la pila queda libre, el event loop mete la siguiente tarea pendiente en l
 4. cuando la pila queda vacía, el event loop mete la función del setTimeout
 5. se muestra "Timeout"
 
+**Ejemplo:**
+console.log("Inicio");
+
+setTimeout(() => {
+  console.log("Timeout");
+}, 0);
+
+console.log("Fin");
+
 ### Respuesta de Claude
 JavaScript es single-threaded, lo que significa que solo puede ejecutar una cosa a la vez. El event loop es el mecanismo que le permite manejar operaciones asíncronas sin bloquear el hilo principal.
 
@@ -79,20 +88,9 @@ Esto tiene implicaciones prácticas importantes:
 
 Si encadenas muchas promesas o usas queueMicrotask en bucle, puedes bloquear el renderizado del navegador, porque el event loop no puede escapar de la microtask queue hasta que se vacíe.
 async/await es azúcar sintáctico sobre promesas: todo lo que está tras un await es equivalente a un .then(), o sea, una microtask.
-Los setTimeout(..., 0) no son "inmediatos" — son simplemente macrotasks, y esperarán a que todas las microtasks pendientes terminen primero
+Los setTimeout(..., 0) no son "inmediatos" — son simplemente macrotasks, y esperarán a que todas las microtasks pendientes terminen primero.
 
-### Comparación
-
-**Ejemplos:**
-### Chat GPT
-
-console.log("Inicio");
-
-setTimeout(() => {
-  console.log("Timeout");
-}, 0);
-
-console.log("Fin");
+**Ejemplo:**
 
 ### Claude
 console.log('inicio');
@@ -105,8 +103,11 @@ console.log('promesa');
 });
 console.log('fin');
 
-**Conclusión:**  
+### Comparación
+Chat GPT y claude pueden dar un definicion muy buena y detallada
 
+**Conclusión:**  
+Ambos son muy buenos explicando conceptos que sea comprensible 
 
 ---
 
