@@ -82,16 +82,7 @@ const triple = multiplicador(3);
 
 doble(5);  // 10
 triple(5); // 15
-### Comparación
 
-
- 
-_Escribe aquí tu comparación._
-
-**Conclusión:**  
-_Escribe aquí cuál de los dos te ayudó más a entender closures y por qué._
-
----
 
 ## Concepto 2
 **Explícame cómo funciona el event loop en JavaScript.**
@@ -154,60 +145,106 @@ console.log('promesa');
 });
 console.log('fin');
 
-### Comparación
-Chat GPT y claude pueden dar un definicion muy buena y detallada
-
-### Conclusión: 
-Ambos son muy buenos explicando conceptos que sea comprensible 
-
----
 
 ## concepto 3
-**Explícame qué es el DOM en JavaScript, para qué sirve y cómo se usa para modificar una página web. Añade un ejemplo sencillo.**
+**Explícame qué es el DOM en JavaScript, Añade un ejemplo sencillo.**
 
 ### Respuesta de ChatGPT
-_Pega aquí la respuesta completa o un resumen fiel._
+El DOM es la forma en la que el navegador representa una página HTML para que JavaScript pueda leerla, cambiarla o interactuar con ella.
+DOM significa Document Object Model.
+Cuando el navegador carga un HTML, lo convierte en una especie de árbol de elementos.
+
+Por ejemplo, este HTML:
+<h1>Hola</h1>
+<p>Bienvenido</p>
+
+el navegador lo entiende como objetos que JavaScript puede usar:
+- un título <h1>
+- un párrafo <p>
+
+Gracias al DOM, JavaScript puede hacer cosas como:
+- cambiar textos
+- cambiar colores
+- añadir elementos
+- borrar elementos
+- responder a clics
 
 ### Respuesta de Claude
-_Pega aquí la respuesta completa o un resumen fiel._
+DOM significa Document Object Model (Modelo de Objetos del Documento). Es la representación en forma de árbol que el navegador crea a partir del HTML de tu página, y que JavaScript puede leer y modificar en tiempo real.
+Piénsalo así: el HTML es el plano de una casa, y el DOM es la casa ya construida. JavaScript puede entrar, mover muebles, pintar paredes o añadir habitaciones.
+<body>
+  <h1>Hola mundo</h1>
+  <p>Bienvenido</p>
+</body>
 
-### Comparación
-**Claridad:**  
-_Escribe aquí tu comparación._
+El DOM lo representa así:
 
-**Profundidad:**  
-_Escribe aquí tu comparación._
+document
+  └── body
+        ├── h1  →  "Hola mundo"
+        └── p   →  "Bienvenido"
 
-**Ejemplos:**  
-_Escribe aquí tu comparación._
+### Comparación:
+Ambos explicaron bien los conceptos, cloude expuso algunos ejemplos practicos mas, pero las respuestas son muy similares 
+### Conclusión:
+Aunque haya alguna pequeña diferencia en los detalles se nota que trabajan a buen nivel 
 
-**Conclusión:**  
-_Escribe aquí cuál fue más útil para estudiar este concepto._
-
----
-
-## Valoración general del bloque de conceptos
-En esta primera prueba observé cómo cada asistente explica conceptos técnicos.  
-_Escribe aquí tu valoración general._
-
-Ejemplo de aspectos que puedes comentar:
-- cuál usa un lenguaje más sencillo
-- cuál da ejemplos más cercanos a casos reales
-- cuál profundiza más sin volverse confuso
-- cuál sería mejor para alguien que está aprendiendo JavaScript
-
----
 
 # 2. Detección y explicación de bugs en JavaScript
 
-## Función con error 1
-
-### Código enviado
-```js
+1. Error en el bucle: usa <= y provoca acceso fuera del array
 function sumarArray(numeros) {
-  let total = 0;
+  let suma = 0;
   for (let i = 0; i <= numeros.length; i++) {
-    total += numeros[i];
+    suma += numeros[i];
   }
-  return total;
+  return suma;
 }
+
+2. Error en la condición: asigna en vez de comparar
+function esMayorDeEdad(edad) {
+  if (edad = 18) {
+    return true;
+  } else {
+    return false;
+  }
+}
+3. Error al devolver el resultado: no retorna nada
+function multiplicar(a, b) {
+  let resultado = a * b;
+}
+## Comparación: 
+La respuesta de Claude es más clara porque enseña el error, la corrección y un ejemplo sencillo.
+## Conclusión: 
+Está bien explicada y es fácil de entender, porque muestra qué falla y cómo arreglarlo.
+
+### 3. Describe en lenguaje natural tres funciones distintas y pide que generen la implementación
+
+## Chat GPT
+1.  Función para contar vocales
+Crea una función que reciba una cadena de texto y devuelva cuántas vocales contiene, sin importar si están en mayúsculas o minúsculas.
+
+2.  Función para invertir un array
+Crea una función que reciba un array y devuelva otro array con los mismos elementos pero en orden inverso, sin usar reverse().
+
+3.  Función para comprobar palíndromos
+Crea una función que reciba una palabra o frase y devuelva true si se lee igual de izquierda a derecha que de derecha a izquierda, ignorando espacios y mayúsculas.
+
+##  Claude
+1.  Validador de contraseña
+
+Recibe un string con una contraseña y devuelve true si cumple estas reglas: mínimo 8 caracteres, al menos una mayúscula, al menos un número y al menos un carácter especial (!@#$%). Si no cumple alguna, devuelve un mensaje indicando qué falta.
+
+2.  Agrupar por categoría
+
+Recibe un array de objetos, cada uno con una propiedad categoria y una propiedad nombre. Devuelve un nuevo objeto donde cada clave es una categoría y su valor es un array con los nombres que pertenecen a ella.
+
+3. Formatear tiempo transcurrido
+
+Recibe una fecha en el pasado y devuelve un string legible indicando cuánto tiempo ha pasado desde entonces: "hace 3 minutos", "hace 2 horas", "hace 5 días", etc. Si es menos de un minuto, devuelve "justo ahora".
+
+## Comparación: 
+Claude da una respuesta más completa y técnica, con pruebas, resumen y mejor organización del código. ChatGPT lo explica de forma más simple y directa, por lo que resulta más fácil de seguir al principio.
+
+## Conclusión: 
+Claude destaca más en detalle y estructura, mientras que ChatGPT es más claro para entenderlo rápido. Las dos respuestas son útiles, pero Claude parece más completa para documentar.
