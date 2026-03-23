@@ -386,3 +386,5 @@ if (themeToggleBtn) {
     setTheme(!isDark);
   });
 }
+// función que devuelve cuántas tareas están marcadas como vistas
+
