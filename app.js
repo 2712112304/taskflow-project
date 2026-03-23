@@ -23,6 +23,7 @@ renderTasks();
 taskForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
+
   const text = taskInput.value.trim();
   const category = categorySelect.value;
   const platform = platformSelect.value;
@@ -236,19 +237,12 @@ function clearAllTasks() {
 
 /* Clase de prioridad */
 function getPriorityClass(priority) {
-  if (priority === "Muy bueno") {
-    return "rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-100";
-  }
-
-  if (priority === "Bueno") {
-    return "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-100";
-  }
-
-  if (priority === "Medio") {
-    return "rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-800 dark:bg-violet-900/40 dark:text-violet-100";
-  }
-
-  return "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-100";
+  const classes = {
+    "Muy bueno": "rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-100",
+    "Bueno": "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-100",
+    "Medio": "rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-800 dark:bg-violet-900/40 dark:text-violet-100"
+  };
+  return classes[priority] || "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-100";
 }
 
 /* Pintar */
