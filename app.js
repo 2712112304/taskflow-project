@@ -11,7 +11,6 @@ const defaultGamesContainer = document.getElementById("default-games");
 
 const markAllViewedBtn = document.getElementById("mark-all-viewed-btn");
 const clearAllBtn = document.getElementById("clear-all-btn");
-const viewedCountEl = document.getElementById("viewed-count");
 
 let tasks = [];
 let selectedCategory = "Todas";
@@ -246,20 +245,8 @@ function getPriorityClass(priority) {
   return classes[priority] || "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-100";
 }
 
-/* Contador de tareas vistas */
-function updateViewedCount() {
-  if (!viewedCountEl) return;
-
-  const viewedCount = tasks.reduce(function (count, task) {
-    return count + (task.viewed ? 1 : 0);
-  }, 0);
-
-  viewedCountEl.textContent = viewedCount;
-}
-
 /* Pintar */
 function renderTasks(highlightId = null) {
-  updateViewedCount();
   taskList.innerHTML = "";
 
   const searchText = searchInput.value.toLowerCase();
@@ -392,19 +379,5 @@ function setTheme(isDark) {
     setTheme(prefersDark);
   }
 })();
-
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener("click", function () {
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(!isDark);
-  });
-}
-// función que devuelve cuántas tareas están marcadas como vistas
-
- 
-
-
-
-
 
 
