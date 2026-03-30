@@ -426,6 +426,13 @@ function setTheme(isDark) {
       window.matchMedia("(prefers-color-scheme: dark)").matches;
     setTheme(prefersDark);
   }
+
 })();
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener("click", function () {
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(!isDark);
+  });
+}
 
 
