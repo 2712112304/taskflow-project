@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/2712112304/taskflow-project#readme",
   "devDependencies": {
-    "tailwindcss": "^4.2.1"
+    "@tailwindcss/cli": "^4.2.2",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2"
   }
 }
