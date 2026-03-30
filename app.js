@@ -20,33 +20,7 @@ initTasks();
 renderTasks();
 
 /* Formulario */
-taskForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-
-
-  const text = taskInput.value.trim();
-  const category = categorySelect.value;
-  const platform = platformSelect.value;
-  const rating = prioritySelect.value;
-
-  if (text === "") return;
-
-  const newTask = {
-    id: Date.now(),
-    text: text,
-    category: category,
-    platform: platform,
-    rating: rating,
-    viewed: false,
-  };
-
-  tasks.push(newTask);
-  saveTasks();
-  renderTasks(newTask.id);
-
-  taskInput.value = "";
-  taskInput.focus();
-});
+taskForm.addEventListener("submit", handleTaskFormSubmit);
 
 /* Buscador */
 searchInput.addEventListener("input", function () {
@@ -74,26 +48,75 @@ if (clearAllBtn) {
     clearAllTasks();
   });
 }
+/**
+ * Gestiona el envío del formulario y añade una nueva tarea si pasa las validaciones.
+ * @param {Event} event
+ */
+function handleTaskFormSubmit(event) {
+  event.preventDefault();
 
-/* Inicializar tareas */
-function initTasks() {
-  const savedTasks = localStorage.getItem("tasks");
+  const taskTitle = taskInput.value.trim();
+  const category = categorySelect.value;
+  const platform = platformSelect.value;
+  const rating = prioritySelect.value;
 
-  if (savedTasks) {
-    tasks = JSON.parse(savedTasks);
-    hideOldHtmlGames();
+  if (taskTitle === "") {
+    alert("El título no puede estar vacío.");
     return;
   }
 
-  tasks = readGamesFromHtml();
+  if (taskTitle.length < 3) {
+    alert("El título debe tener al menos 3 caracteres.");
+    return;
+  }
+
+  const taskAlreadyExists = tasks.some(function (task) {
+    return task.text.toLowerCase() === taskTitle.toLowerCase();
+  });
+
+  if (taskAlreadyExists) {
+    alert("Ese título ya existe en la lista.");
+    return;
+  }
+
+  const newTask = {
+    id: Date.now(),
+    text: taskTitle,
+    category: category,
+    platform: platform,
+    rating: rating,
+    viewed: false,
+  };
+
+  tasks.push(newTask);
   saveTasks();
+  renderTasks(newTask.id);
+
+  taskInput.value = "";
+  taskInput.focus();
+}
+
+/* Inicializar tareas */
+/**
+ * Inicializa la lista de tareas desde localStorage o desde el HTML inicial.
+ */
+function initTasks() {
+  const storedTasks = localStorage.getItem("tasks");
+
+  if (storedTasks) {
+    tasks = JSON.parse(storedTasks);
+  } else {
+    tasks = readGamesFromHtml();
+    saveTasks();
+  }
+
   hideOldHtmlGames();
 }
 
 /* Leer los juegos antiguos del HTML */
 function readGamesFromHtml() {
   const articles = document.querySelectorAll(".default-game");
-  const games = [];
+  const extractedGames = [];
 
   articles.forEach(function (article, index) {
     const titleElement = article.querySelector("h3");
@@ -106,7 +129,7 @@ function readGamesFromHtml() {
     const platform = spans[1].textContent.trim();
     const rating = spans[2].textContent.trim();
 
-    games.push({
+    extractedGames.push({
       id: Date.now() + index,
       text: title,
       category: category,
@@ -116,7 +139,7 @@ function readGamesFromHtml() {
     });
   });
 
-  return games;
+  return extractedGames;
 }
 
 /* Ocultar catálogo antiguo del HTML */
@@ -132,6 +155,10 @@ function saveTasks() {
 }
 
 /* Borrar una con animación */
+/**
+ * Elimina una tarea por su id y aplica una animación si existe en el DOM.
+ * @param {number} id
+ */
 function deleteTask(id) {
   const article = taskList.querySelector(`[data-id="${id}"]`);
 
@@ -160,26 +187,33 @@ function deleteTask(id) {
 }
 
 /* Editar título */
+/**
+ * Edita el título de una tarea existente.
+ * @param {number} id
+ */
 function editTask(id) {
-  const taskToEdit = tasks.find(function (task) {
+  const currentTask = tasks.find(function (task) {
     return task.id === id;
   });
 
-  if (!taskToEdit) return;
+  if (!currentTask) return;
 
-  const newTitle = prompt("Editar título:", taskToEdit.text);
+  const updatedTitle = prompt("Editar título:", currentTask.text);
 
-  if (newTitle === null) return;
+  if (updatedTitle === null) return;
 
-  const trimmedTitle = newTitle.trim();
+  const sanitizedTitle = updatedTitle.trim();
 
-  if (trimmedTitle === "") return;
+  if (sanitizedTitle === "") {
+    alert("El título no puede estar vacío.");
+    return;
+  }
 
   tasks = tasks.map(function (task) {
     if (task.id === id) {
       return {
         ...task,
-        text: trimmedTitle,
+        text: sanitizedTitle,
       };
     }
 
@@ -191,6 +225,10 @@ function editTask(id) {
 }
 
 /* Marcar una como vista */
+/**
+ * Cambia el estado visto/no visto de una tarea.
+ * @param {number} id
+ */
 function toggleViewed(id) {
   tasks = tasks.map(function (task) {
     if (task.id === id) {
@@ -226,9 +264,8 @@ function markAllAsViewed() {
 function clearAllTasks() {
   if (tasks.length === 0) return;
 
-  const confirmed = confirm("¿Seguro que quieres borrar todos los títulos?");
-
-  if (!confirmed) return;
+  const userConfirmedDeletion = confirm("¿Seguro que quieres borrar todos los títulos?");
+  if (!userConfirmedDeletion) return;
 
   tasks = [];
   saveTasks();
@@ -244,21 +281,28 @@ function getPriorityClass(priority) {
   };
   return classes[priority] || "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-100";
 }
-
-/* Pintar */
-function renderTasks(highlightId = null) {
-  taskList.innerHTML = "";
-
+/**
+ * Devuelve las tareas filtradas por texto de búsqueda y categoría seleccionada.
+ * @returns {Array}
+ */
+function getFilteredTasks() {
   const searchText = searchInput.value.toLowerCase();
 
-  const filteredTasks = tasks.filter(function (task) {
+  return tasks.filter(function (task) {
     const matchesSearch = task.text.toLowerCase().includes(searchText);
     const matchesCategory =
       selectedCategory === "Todas" || task.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
+}
+/* Pintar */
+function renderTasks(highlightId = null) {
+  taskList.innerHTML = "";
 
+  const filteredTasks = getFilteredTasks();
+
+  
   if (filteredTasks.length === 0) {
     taskList.innerHTML = `
       <p class="rounded-lg bg-slate-100 px-3 py-3 text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-300">
@@ -362,6 +406,10 @@ function renderTasks(highlightId = null) {
 }
 
 /* Tema oscuro */
+/**
+ * Aplica el tema visual y lo guarda en localStorage.
+ * @param {boolean} isDark
+ */
 function setTheme(isDark) {
   document.documentElement.classList.toggle("dark", isDark);
   localStorage.setItem("theme", isDark ? "dark" : "light");
