@@ -3,64 +3,62 @@
 ## Introducción
 En este documento voy a explicar cómo he utilizado Cursor como IDE asistido por inteligencia artificial durante el desarrollo de TaskFlow. Describiré las tareas en las que me ha ayudado, cómo ha encajado en mi flujo de trabajo y qué ventajas o limitaciones he encontrado.
 
-## Explicación de código
+## Conectar servidores MCP
 
-## Explicación de código existente
+### Qué es MCP
 
-Probé Cursor pidiéndole que explicara paso a paso la función `renderTasks(highlightId = null)` de `app.js`.
+El **Model Context Protocol (MCP)** es un estándar abierto que permite conectar asistentes de IA con fuentes de datos, herramientas y servicios externos mediante una interfaz común. Su objetivo es que la IA pueda trabajar con contexto real del proyecto, como archivos, repositorios o APIs, sin depender solo del texto que se copie manualmente en el chat. 
 
-Cursor explicó correctamente los puntos principales:
-- limpia `taskList`
-- lee el texto del buscador
-- filtra las tareas por texto y categoría
-- muestra un mensaje si no hay resultados
-- crea un `article` por cada tarea
-- añade botones y eventos
-- aplica una animación cuando `highlightId` coincide
+### Configuración de MCP en Cursor
 
-La respuesta fue clara y útil para entender cómo funciona el renderizado de tareas.
+Para esta práctica utilicé Cursor, que permite añadir servidores MCP personalizados desde su configuración. En mi caso, accedí a la opción **Add custom MCP**, que abrió el archivo `mcp.json`, donde se define la configuración del servidor. Cursor documenta soporte para MCP y configuración de servidores personalizados. 
 
-## Prueba de edición inline
+### Instalación del servidor MCP filesystem paso a paso
 
-Después probé la edición inline con una función pequeña y mejorable: `getPriorityClass(priority)`.
+1. Abrí Cursor y entré en la configuración de MCP.
+2. Seleccioné la opción **Add custom MCP**.
+3. Se abrió el archivo `mcp.json`.
+4. Añadí la configuración del servidor `filesystem`.
+5. Usé `npx` como comando.
+6. Añadí como argumentos:
+   - `-y`
+   - `@modelcontextprotocol/server-filesystem`
+   - la ruta local del proyecto
+7. Guardé el archivo.
+8. Reinicié Cursor o recargué la configuración.
+9. Probé varias consultas en el chat para comprobar que el servidor podía acceder a los archivos del proyecto.
 
-Seleccioné esa función y usé la edición inline para darle esta instrucción:
+La configuración utilizada fue esta:
 
-> Simplifica esta función para que sea más legible, manteniendo exactamente el mismo comportamiento.
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Carlos\\Desktop\\taskflow-project"
+      ]
+    }
+  }
+}
+### Comprobación de funcionamiento
 
-Con esta prueba comprobé que Cursor puede refactorizar una parte concreta del código sin cambiar su resultado, haciendo la función más clara y fácil de leer.
+Una vez configurado el servidor, comprobé que funcionaba correctamente pidiendo a la IA que accediera a información real del proyecto. El servidor pudo listar archivos principales, leer contenido de `app.js`, revisar `index.html`, analizar `tailwind.config.js` y comparar la relación entre la estructura HTML y la lógica JavaScript.
 
-## Prueba de autocompletado
+### Consultas realizadas con MCP
 
-También probé el autocompletado escribiendo un comentario al final del archivo:
+Durante la prueba realicé al menos cinco consultas distintas:
 
-app.js 
+1. **Listar los archivos principales del proyecto.**
+2. **Leer `app.js` y resumir sus funciones principales.**
+3. **Leer `index.html` y resumir la estructura principal de la interfaz.**
+4. **Revisar `tailwind.config.js` y explicar la configuración del modo oscuro.**
+5. **Comparar `index.html` y `app.js` para entender cómo se conectan los elementos del DOM con la lógica JavaScript.**
 
-//  función que devuelve cuántas tareas están marcadas como vistas
+### Utilidad de MCP en proyectos reales
 
-A partir de ese comentario, Cursor generó una función útil para contar las tareas vistas. El código generado era correcto y cumplía con lo que pedía el comentario.
+MCP puede ser muy útil en proyectos reales porque permite que la IA acceda directamente a archivos, carpetas y herramientas externas sin tener que copiar y pegar toda la información manualmente. Esto ahorra tiempo, mejora el análisis del proyecto y facilita trabajar con repositorios grandes o con varios archivos relacionados. También puede servir para conectar la IA con servicios como GitHub, documentación interna o bases de datos.
 
-No hubo cambios visibles en la página porque era solo una función de prueba y no estaba conectada a la interfaz.
-
-## Prueba de Agent / Composer
-
-En mi versión de Cursor, Composer aparecía integrado como Agent. Lo utilicé para probar cambios que afectaran a varios archivos del proyecto.
-
-Le di una instrucción para añadir un contador visible de tareas vistas en la interfaz. Cursor entendió la petición y modificó dos archivos:
-
--   index.html
--   app.js
-
-Los cambios realizados fueron:
-
--   en index.html, añadió un bloque con id="viewed-count" para mostrar el contador
--   en app.js, añadió la referencia al elemento del DOM
--   creó una función updateViewedCount()
--   hizo que el contador se actualizara dentro de renderTasks()
-
-El resultado fue correcto, ya que el contador se actualiza automáticamente cada vez que se vuelve a renderizar la lista.
-
-### Conclusión
-
-Las pruebas con Cursor fueron útiles para comprobar distintas formas de asistencia dentro del IDE. La herramienta sirvió para explicar código existente, mejorar funciones concretas con edición inline, generar código a partir de comentarios mediante autocompletado y aplicar cambios coordinados en varios archivos usando Agent. En general, la experiencia fue positiva y ayudó a agilizar tareas de comprensión, refactorización y ampliación del proyecto.
-
+En este proyecto, el servidor MCP `filesystem` fue útil para leer `app.js`, revisar `index.html`, comprobar la configuración de Tailwind y entender cómo se conectan la interfaz y la lógica de la aplicación.
