@@ -30,7 +30,7 @@ Para esta práctica utilicé Cursor, que permite añadir servidores MCP personal
 
 La configuración utilizada fue esta:
 
-```json
+
 {
   "mcpServers": {
     "filesystem": {
