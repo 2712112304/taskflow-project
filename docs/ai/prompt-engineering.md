@@ -12,6 +12,7 @@ En esta práctica probé distintos enfoques de prompt engineering aplicados al d
 
 **Prompt:**
 Actúa como un desarrollador senior de JavaScript. Revisa esta función de TaskFlow, detecta problemas de legibilidad, validación o mantenimiento y propón una versión mejorada sin cambiar su comportamiento.
+
 Uso en el proyecto:
 Lo utilicé para revisar funciones del archivo app.js, especialmente en tareas de refactorización.
 
@@ -22,6 +23,7 @@ Funciona bien porque asigna un rol concreto a la IA y orienta la respuesta hacia
 ###  Prompt 2 — Rol de revisor técnico para documentación
 **Prompt**
 Actúa como un revisor técnico y ayúdame a redactar documentación clara y ordenada para este cambio del proyecto, con tono académico y fácil de entender.
+
 Uso en el proyecto:
 Lo utilicé para redactar partes de la documentación en docs/ai.
 
