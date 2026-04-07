@@ -35,3 +35,65 @@ Funciona bien porque fija el tono y el tipo de salida esperada. La IA responde d
 
 También utilicé estos prompts para generar código, refactorizar funciones y documentar partes del proyecto.
 
+## Prompts con ejemplos previos (few-shot prompting)
+
+### Prompt 3 — Generar funciones siguiendo un estilo dado
+
+**Prompt:**
+Te doy dos ejemplos del estilo que quiero en mis funciones JavaScript:
+
+Ejemplo 1:
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+Ejemplo 2:
+function hideOldHtmlGames() {
+  if (defaultGamesContainer) {
+    defaultGamesContainer.style.display = "none";
+  }
+}
+
+Ahora genera una nueva función para TaskFlow que cuente cuántas tareas están marcadas como vistas, manteniendo el mismo estilo de código.
+
+Uso en el proyecto:
+Lo utilicé para pedir funciones nuevas manteniendo el estilo ya existente en app.js.
+
+Por qué funciona bien:
+Funciona bien porque no solo pide un resultado, sino que enseña a la IA el formato, la complejidad y el estilo esperado. Eso hace que la respuesta encaje mejor con el proyecto
+
+## Prompt 4 — Refactorizar siguiendo un ejemplo concreto
+**Prompt:**
+Quiero que refactorices esta función siguiendo este ejemplo de estilo:
+
+Ejemplo de estilo deseado:
+function initTasks() {
+  const storedTasks = localStorage.getItem("tasks");
+
+  if (storedTasks) {
+    tasks = JSON.parse(storedTasks);
+  } else {
+    tasks = readGamesFromHtml();
+    saveTasks();
+  }
+
+  hideOldHtmlGames();
+}
+
+Ahora aplica ese mismo nivel de claridad y simplicidad a esta otra función, sin cambiar su comportamiento.
+
+Uso en el proyecto:
+Lo utilicé para pedir refactors con una referencia clara del tipo de resultado que quería obtener.
+
+Por qué funciona bien:
+Funciona bien porque reduce la ambigüedad. En vez de pedir “mejóralo” de forma vaga, doy un ejemplo concreto del estilo final esperado.
+
+## Prompts con razonamiento paso a paso
+
+### Prompt 5 — Analizar una función paso a paso
+
+**Prompt:**
+```text
+Analiza esta función paso a paso. Explica qué hace cada bloque, qué datos usa, qué resultado produce y qué partes podrían mejorarse sin cambiar su comportamiento.
+## Prompts con razonamiento paso a paso
+
