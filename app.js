@@ -5,6 +5,7 @@ const taskInput = document.getElementById("task-input");
 const categorySelect = document.getElementById("category-select");
 const taskList = document.getElementById("task-list");
 const searchInput = document.getElementById("search-input");
+const sortSelect = document.getElementById("sort-select");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const themeToggleBtn = document.getElementById("theme-toggle");
 const defaultGamesContainer = document.getElementById("default-games");
@@ -26,6 +27,12 @@ taskForm.addEventListener("submit", handleTaskFormSubmit);
 searchInput.addEventListener("input", function () {
   renderTasks();
 });
+
+if (sortSelect) {
+  sortSelect.addEventListener("change", function () {
+    renderTasks();
+  });
+}
 
 /* Filtros */
 filterButtons.forEach(function (button) {
@@ -296,14 +303,45 @@ function getFilteredTasks() {
     return matchesSearch && matchesCategory;
   });
 }
+
+function getSortedTasks(filteredTasks) {
+  const sortedTasks = [...filteredTasks];
+  const sortValue = sortSelect ? sortSelect.value : "default";
+
+  if (sortValue === "title") {
+    sortedTasks.sort(function (a, b) {
+      return a.text.localeCompare(b.text, "es", { sensitivity: "base" });
+    });
+  }
+
+  if (sortValue === "rating") {
+    const ratingOrder = {
+      "Muy bueno": 0,
+      "Bueno": 1,
+      "Medio": 2
+    };
+
+    sortedTasks.sort(function (a, b) {
+      return ratingOrder[a.rating] - ratingOrder[b.rating];
+    });
+  }
+
+  if (sortValue === "viewed") {
+    sortedTasks.sort(function (a, b) {
+      return Number(a.viewed) - Number(b.viewed);
+    });
+  }
+
+  return sortedTasks;
+}
 /* Pintar */
 function renderTasks(highlightId = null) {
   taskList.innerHTML = "";
 
   const filteredTasks = getFilteredTasks();
+const sortedTasks = getSortedTasks(filteredTasks);
 
-  
-  if (filteredTasks.length === 0) {
+if (sortedTasks.length === 0) {
     taskList.innerHTML = `
       <p class="rounded-lg bg-slate-100 px-3 py-3 text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-300">
         No hay títulos para mostrar.
@@ -312,7 +350,7 @@ function renderTasks(highlightId = null) {
     return;
   }
 
-  filteredTasks.forEach(function (task) {
+  sortedTasks.forEach(function (task) {
     const article = document.createElement("article");
     article.dataset.id = task.id;
     article.className =
