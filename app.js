@@ -6,6 +6,7 @@ const categorySelect = document.getElementById("category-select");
 const taskList = document.getElementById("task-list");
 const searchInput = document.getElementById("search-input");
 const sortSelect = document.getElementById("sort-select");
+const statusFilter = document.getElementById("status-filter");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const themeToggleBtn = document.getElementById("theme-toggle");
 const defaultGamesContainer = document.getElementById("default-games");
@@ -28,8 +29,14 @@ searchInput.addEventListener("input", function () {
   renderTasks();
 });
 
+
 if (sortSelect) {
   sortSelect.addEventListener("change", function () {
+    renderTasks();
+  });
+}
+if (statusFilter) {
+  statusFilter.addEventListener("change", function () {
     renderTasks();
   });
 }
@@ -294,13 +301,19 @@ function getPriorityClass(priority) {
  */
 function getFilteredTasks() {
   const searchText = searchInput.value.toLowerCase();
+  const selectedStatus = statusFilter ? statusFilter.value : "all";
 
   return tasks.filter(function (task) {
     const matchesSearch = task.text.toLowerCase().includes(searchText);
     const matchesCategory =
       selectedCategory === "Todas" || task.category === selectedCategory;
 
-    return matchesSearch && matchesCategory;
+    const matchesStatus =
+      selectedStatus === "all" ||
+      (selectedStatus === "viewed" && task.viewed) ||
+      (selectedStatus === "pending" && !task.viewed);
+
+    return matchesSearch && matchesCategory && matchesStatus;
   });
 }
 
