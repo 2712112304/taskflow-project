@@ -9,7 +9,10 @@ const sortSelect = document.getElementById("sort-select");
 const statusFilter = document.getElementById("status-filter");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const themeToggleBtn = document.getElementById("theme-toggle");
-const defaultGamesContainer = document.getElementById("default-games");
+const defaultGamesContainer = document.getElementById("default-games")
+const totalCountEl = document.getElementById("total-count");
+const viewedStatsCountEl = document.getElementById("viewed-stats-count");
+const pendingCountEl = document.getElementById("pending-count");
 
 const markAllViewedBtn = document.getElementById("mark-all-viewed-btn");
 const clearAllBtn = document.getElementById("clear-all-btn");
@@ -347,10 +350,30 @@ function getSortedTasks(filteredTasks) {
 
   return sortedTasks;
 }
+/* Actualizar estadísticas */
+function updateStats() {
+  const totalTasks = tasks.length;
+  const viewedTasks = tasks.filter(function (task) {
+    return task.viewed;
+  }).length;
+  const pendingTasks = totalTasks - viewedTasks;
+
+  if (totalCountEl) {
+    totalCountEl.textContent = totalTasks;
+  }
+
+  if (viewedStatsCountEl) {
+    viewedStatsCountEl.textContent = viewedTasks;
+  }
+
+  if (pendingCountEl) {
+    pendingCountEl.textContent = pendingTasks;
+  }
+}
 /* Pintar */
 function renderTasks(highlightId = null) {
   taskList.innerHTML = "";
-
+  updateStats();
   const filteredTasks = getFilteredTasks();
 const sortedTasks = getSortedTasks(filteredTasks);
 
@@ -363,13 +386,14 @@ if (sortedTasks.length === 0) {
     return;
   }
 
+
   sortedTasks.forEach(function (task) {
     const article = document.createElement("article");
     article.dataset.id = task.id;
     article.className =
-      "flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:shadow-md transition dark:bg-slate-900 dark:ring-slate-800 sm:flex-row sm:items-center";
-
-    if (task.viewed) {
+  "flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 hover:-translate-y-0.5 hover:shadow-md transition dark:bg-slate-900 dark:ring-slate-800 xl:flex-row xl:items-center xl:flex-wrap";
+    
+  if (task.viewed) {
       article.style.opacity = "0.75";
     } else {
       article.style.opacity = "1";
