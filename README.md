@@ -1,63 +1,43 @@
-# Taskflow Project
-https://taskflow-project-xi.vercel.app/
-## Diseño de la aplicación
+## Descripción de `index.html`
 
-Antes de comenzar el desarrollo de TaskFlow, se realizó un wireframe sencillo para planificar la estructura de la interfaz.
+El archivo `index.html` define la estructura principal de la interfaz de la aplicación TaskFlow. En él se organizan los distintos bloques visuales del proyecto, incluyendo la cabecera, el panel lateral, el formulario de entrada y el contenedor donde se muestran dinámicamente los títulos.
 
-La aplicación está organizada en tres secciones principales:
+Su función principal es servir de base a la interfaz gráfica, proporcionando los elementos del DOM que posteriormente son manipulados desde `app.js`.
 
-- **Cabecera**: muestra el nombre de la aplicación.
-- **Formulario**: permite escribir y añadir nuevas tareas.
-- **Lista de titulos**: muestra los titulos creados .
+### Elementos principales
 
+- **Cabecera** con el nombre de la aplicación y el botón de cambio de tema.
+- **Panel lateral** con los filtros por género y el panel de estadísticas.
+- **Formulario principal** para añadir nuevos títulos.
+- **Zona de búsqueda y ordenación** para gestionar la visualización de los títulos.
+- **Lista de títulos** renderizada dinámicamente con JavaScript.
+- **Catálogo inicial en HTML**, utilizado como fuente de datos en la primera carga.
 
-El usuario podrá realizar las siguientes acciones:
-Añadir nuevos títulos de videojuegos
--   Seleccionar género
--   Seleccionar plataforma
--   Asignar una valoración
--   Buscar títulos con el buscador
--   Editar el título de un juego
--   Marcar un juego como visto
--   Marcar todos los juegos como vistos
--   Eliminar un título individual
--   Borrar todos los títulos
--   Cambiar entre modo claro y modo oscuro
+---
 
-El diseño inicial se ha guardado en la carpeta `docs/design`.
+## Descripción de `app.js`
 
-**Testing manual de la aplicación**
-1. Prueba con la lista vacía
+El archivo `app.js` contiene toda la lógica funcional de la aplicación. Se encarga de gestionar el comportamiento de la interfaz, el estado de los títulos, la persistencia de datos y la interacción del usuario con los distintos controles.
 
-Acción: Abrir la aplicación sin títulos guardados.
-Resultado: La lista aparece vacía y la interfaz se muestra correctamente sin errores.
+Su propósito es conectar la estructura definida en `index.html` con la lógica de negocio del proyecto, permitiendo añadir, editar, eliminar, filtrar, ordenar y visualizar los títulos de forma dinámica.
 
-2. Añadir una tarea sin título
+### Funcionalidades principales gestionadas en `app.js`
 
-Acción: Intentar añadir un título sin escribir texto.
-Resultado: La aplicación no permite añadir el elemento porque el campo está vacío.
+- Inicialización de datos desde `localStorage` o desde el catálogo HTML inicial.
+- Gestión del formulario de creación de títulos.
+- Validación de datos introducidos por el usuario.
+- Edición y eliminación de títulos.
+- Cambio de estado de los títulos a visto o pendiente.
+- Filtrado por texto, género y estado.
+- Ordenación de títulos según distintos criterios.
+- Actualización automática de estadísticas.
+- Renderizado dinámico de la lista.
+- Gestión del modo oscuro.
 
-3. Añadir un título muy largo
+### Persistencia
 
-Acción: Añadir un videojuego con un nombre muy largo.
+La aplicación utiliza `localStorage` para guardar los datos del usuario y conservarlos entre recargas de página.
 
-Ejemplo:
+### Relación entre ambos archivos
 
-The Legend of Zelda Breath of the Wild Complete Edition Deluxe Remastered Version
-
-Resultado: El título se muestra correctamente en la lista sin romper el diseño.
-
-4. Marcar varias tareas como completadas
-
-Acción: Marcar varios títulos como vistos usando el botón correspondiente.
-Resultado: Los títulos aparecen tachados y con menor opacidad indicando que han sido completados.
-
-5. Eliminar varias tareas
-
-Acción: Eliminar varios títulos utilizando el botón Borrar.
-Resultado: Los elementos desaparecen correctamente de la lista.
-
-6. Recargar la página
-
-Acción: Recargar el navegador después de añadir o modificar títulos.
-Resultado: Los títulos se mantienen porque los datos se guardan en localStorage.
+`index.html` aporta la estructura visual y los elementos de interfaz, mientras que `app.js` aporta la lógica que permite interactuar con ellos y mantener actualizada la aplicación.
