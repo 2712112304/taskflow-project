@@ -1,3 +1,4 @@
+import { getTasks, createTask, deleteTaskRequest } from './src/api/client.js';
 const platformSelect = document.getElementById("platform-select");
 const prioritySelect = document.getElementById("priority-select");
 const taskForm = document.getElementById("task-form");
@@ -13,6 +14,8 @@ const defaultGamesContainer = document.getElementById("default-games")
 const totalCountEl = document.getElementById("total-count");
 const viewedStatsCountEl = document.getElementById("viewed-stats-count");
 const pendingCountEl = document.getElementById("pending-count");
+const loadingMessageEl = document.getElementById("loading-message");
+const errorMessageEl = document.getElementById("error-message");
 
 const markAllViewedBtn = document.getElementById("mark-all-viewed-btn");
 const clearAllBtn = document.getElementById("clear-all-btn");
@@ -20,9 +23,45 @@ const clearAllBtn = document.getElementById("clear-all-btn");
 let tasks = [];
 let selectedCategory = "Todas";
 
+function setLoading(isLoading) {
+  if (!loadingMessageEl) return;
+  loadingMessageEl.classList.toggle("hidden", !isLoading);
+}
+
+function showError(message) {
+  if (!errorMessageEl) return;
+  errorMessageEl.textContent = message;
+  errorMessageEl.classList.remove("hidden");
+}
+
+function clearError() {
+  if (!errorMessageEl) return;
+  errorMessageEl.textContent = "";
+  errorMessageEl.classList.add("hidden");
+}
+
+async function loadTasksFromApi() {
+  setLoading(true);
+  clearError();
+
+  try {
+    tasks = await getTasks();
+    hideOldHtmlGames();
+    renderTasks();
+  } catch (error) {
+    showError(error.message || "No se pudieron cargar las tareas.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function initializeApp() {
+  hideOldHtmlGames();
+  await loadTasksFromApi();
+}
+
 /* Cargar datos */
-initTasks();
-renderTasks();
+initializeApp();
 
 /* Formulario */
 taskForm.addEventListener("submit", handleTaskFormSubmit);
@@ -69,7 +108,7 @@ if (clearAllBtn) {
  * Gestiona el envío del formulario y añade una nueva tarea si pasa las validaciones.
  * @param {Event} event
  */
-function handleTaskFormSubmit(event) {
+async function handleTaskFormSubmit(event) {
   event.preventDefault();
 
   const taskTitle = taskInput.value.trim();
@@ -88,7 +127,7 @@ function handleTaskFormSubmit(event) {
   }
 
   const taskAlreadyExists = tasks.some(function (task) {
-    return task.text.toLowerCase() === taskTitle.toLowerCase();
+    return task.title.toLowerCase() === taskTitle.toLowerCase();
   });
 
   if (taskAlreadyExists) {
@@ -96,21 +135,27 @@ function handleTaskFormSubmit(event) {
     return;
   }
 
-  const newTask = {
-    id: Date.now(),
-    text: taskTitle,
-    category: category,
-    platform: platform,
-    rating: rating,
-    viewed: false,
-  };
+  clearError();
+  setLoading(true);
 
-  tasks.push(newTask);
-  saveTasks();
-  renderTasks(newTask.id);
+  try {
+    const newTask = await createTask({
+      title: taskTitle,
+      category: category,
+      platform: platform,
+      rating: rating,
+    });
 
-  taskInput.value = "";
-  taskInput.focus();
+    tasks.push(newTask);
+    renderTasks(newTask.id);
+
+    taskInput.value = "";
+    taskInput.focus();
+  } catch (error) {
+    showError(error.message || "No se pudo crear la tarea.");
+  } finally {
+    setLoading(false);
+  }
 }
 
 /* Inicializar tareas */
@@ -176,16 +221,19 @@ function saveTasks() {
  * Elimina una tarea por su id y aplica una animación si existe en el DOM.
  * @param {number} id
  */
-function deleteTask(id) {
+async function deleteTask(id) {
   const article = taskList.querySelector(`[data-id="${id}"]`);
 
   if (!article) {
-    tasks = tasks.filter(function (task) {
-      return task.id !== id;
-    });
-
-    saveTasks();
-    renderTasks();
+    try {
+      await deleteTaskRequest(id);
+      tasks = tasks.filter(function (task) {
+        return task.id !== id;
+      });
+      renderTasks();
+    } catch (error) {
+      showError(error.message || "No se pudo eliminar la tarea.");
+    }
     return;
   }
 
@@ -193,13 +241,18 @@ function deleteTask(id) {
   article.style.opacity = "0";
   article.style.transform = "translateY(-10px)";
 
-  setTimeout(function () {
-    tasks = tasks.filter(function (task) {
-      return task.id !== id;
-    });
-
-    saveTasks();
-    renderTasks();
+  setTimeout(async function () {
+    try {
+      await deleteTaskRequest(id);
+      tasks = tasks.filter(function (task) {
+        return task.id !== id;
+      });
+      renderTasks();
+    } catch (error) {
+      showError(error.message || "No se pudo eliminar la tarea.");
+      article.style.opacity = "1";
+      article.style.transform = "translateY(0)";
+    }
   }, 250);
 }
 
@@ -215,7 +268,7 @@ function editTask(id) {
 
   if (!currentTask) return;
 
-  const updatedTitle = prompt("Editar título:", currentTask.text);
+  const updatedTitle = prompt("Editar título:", currentTask.title);
 
   if (updatedTitle === null) return;
 
@@ -230,7 +283,7 @@ function editTask(id) {
     if (task.id === id) {
       return {
         ...task,
-        text: sanitizedTitle,
+        title: sanitizedTitle,
       };
     }
 
@@ -307,7 +360,7 @@ function getFilteredTasks() {
   const selectedStatus = statusFilter ? statusFilter.value : "all";
 
   return tasks.filter(function (task) {
-    const matchesSearch = task.text.toLowerCase().includes(searchText);
+    const matchesSearch = task.title.toLowerCase().includes(searchText);
     const matchesCategory =
       selectedCategory === "Todas" || task.category === selectedCategory;
 
@@ -326,7 +379,7 @@ function getSortedTasks(filteredTasks) {
 
   if (sortValue === "title") {
     sortedTasks.sort(function (a, b) {
-      return a.text.localeCompare(b.text, "es", { sensitivity: "base" });
+      return a.title.localeCompare(b.title, "es", { sensitivity: "base" });
     });
   }
 
@@ -405,7 +458,7 @@ if (sortedTasks.length === 0) {
 
     article.innerHTML = `
       <h3 class="mr-auto font-semibold" ${titleStyle}>
-        ${task.text}
+        ${task.title}
       </h3>
 
       <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-100">

@@ -1,43 +1,94 @@
-## Descripción de `index.html`
+# TaskFlow Project
 
-El archivo `index.html` define la estructura principal de la interfaz de la aplicación TaskFlow. En él se organizan los distintos bloques visuales del proyecto, incluyendo la cabecera, el panel lateral, el formulario de entrada y el contenedor donde se muestran dinámicamente los títulos.
+Aplicación web para gestionar una biblioteca de videojuegos de forma sencilla, visual y responsive. Permite añadir títulos, clasificarlos, buscarlos, ordenarlos, marcarlos como vistos y administrarlos desde una interfaz clara conectada a un backend con Express.
 
-Su función principal es servir de base a la interfaz gráfica, proporcionando los elementos del DOM que posteriormente son manipulados desde `app.js`.
+## Demo
 
-### Elementos principales
+Frontend desplegado:  
+https://taskflow-project-xi.vercel.app/
 
-- **Cabecera** con el nombre de la aplicación y el botón de cambio de tema.
-- **Panel lateral** con los filtros por género y el panel de estadísticas.
-- **Formulario principal** para añadir nuevos títulos.
-- **Zona de búsqueda y ordenación** para gestionar la visualización de los títulos.
-- **Lista de títulos** renderizada dinámicamente con JavaScript.
-- **Catálogo inicial en HTML**, utilizado como fuente de datos en la primera carga.
+## Funcionalidades
 
----
+- **Añadir títulos** — Crea nuevos videojuegos con título, género, plataforma y valoración
+- **Editar títulos** — Modifica el nombre de cualquier videojuego existente
+- **Eliminar títulos** — Borra títulos individuales o vacía toda la lista
+- **Marcar como visto** — Cambia el estado de un título a visto o pendiente
+- **Filtro por género** — Filtra los videojuegos desde el panel lateral
+- **Ordenación** — Ordena los títulos por nombre, prioridad o estado
+- **Búsqueda en tiempo real** — Encuentra videojuegos mientras escribes
+- **Panel de estadísticas** — Consulta el total de títulos, vistos y pendientes
+- **Modo oscuro/claro** — Cambia la apariencia de la aplicación
+- **API REST con Express** — El frontend consume datos desde un backend propio
+- **Estados de red en la interfaz** — Muestra carga, éxito y error al comunicarse con la API
 
-## Descripción de `app.js`
+## Categorías disponibles
 
-El archivo `app.js` contiene toda la lógica funcional de la aplicación. Se encarga de gestionar el comportamiento de la interfaz, el estado de los títulos, la persistencia de datos y la interacción del usuario con los distintos controles.
+| Categoría | Descripción |
+|----------|-------------|
+| Shooter | Juegos de acción y disparos |
+| RPG | Juegos de rol y progresión |
+| Aventura | Juegos narrativos y de exploración |
+| Carreras | Juegos de conducción y velocidad |
 
-Su propósito es conectar la estructura definida en `index.html` con la lógica de negocio del proyecto, permitiendo añadir, editar, eliminar, filtrar, ordenar y visualizar los títulos de forma dinámica.
+##  Ejemplos de uso
+### Añadir un videojuego
+1.  Escribe el título en el campo principal
+2.  Selecciona género, plataforma y valoración
+3.  Pulsa Añadir
+### Buscar un título
+1.  Escribe parte del nombre en el buscador
+2.  La lista se filtra automáticamente
+### Ordenar títulos
+1.  Usa el selector Ordenar por
+2.  Puedes ordenar por título, prioridad o estado
+### Filtrar por género
+1.  Pulsa uno de los botones del panel lateral
+2.  Solo se mostrarán los títulos de esa categoría
+### Marcar como visto
+1.  Pulsa el botón Marcar visto
+2.  El título cambiará visualmente y se actualizarán las estadísticas
 
-### Funcionalidades principales gestionadas en `app.js`
+##  Estructura del proyecto
+taskflow-project/
+├── index.html
+├── app.js
+├── output.css
+├── tailwind.config.js
+├── README.md
+├── src/
+│   ├── input.css
+│   └── api/
+│       └── client.js
+├── server/
+│   ├── package.json
+│   ├── .env
+│   └── src/
+│       ├── index.js
+│       ├── config/
+│       │   └── env.js
+│       ├── controllers/
+│       │   └── task.controller.js
+│       ├── routes/
+│       │   └── task.routes.js
+│       └── services/
+│           └── task.service.js
+└── docs/
+    └── ai/
+        ├── ai-comparison.md
+        ├── cursor-workflow.md
+        ├── prompt-engineering.md
+        ├── experiments.md
+        └── reflection.md
 
-- Inicialización de datos desde `localStorage` o desde el catálogo HTML inicial.
-- Gestión del formulario de creación de títulos.
-- Validación de datos introducidos por el usuario.
-- Edición y eliminación de títulos.
-- Cambio de estado de los títulos a visto o pendiente.
-- Filtrado por texto, género y estado.
-- Ordenación de títulos según distintos criterios.
-- Actualización automática de estadísticas.
-- Renderizado dinámico de la lista.
-- Gestión del modo oscuro.
-
-### Persistencia
-
-La aplicación utiliza `localStorage` para guardar los datos del usuario y conservarlos entre recargas de página.
-
-### Relación entre ambos archivos
-
-`index.html` aporta la estructura visual y los elementos de interfaz, mientras que `app.js` aporta la lógica que permite interactuar con ellos y mantener actualizada la aplicación.
+        | Tecnología      | Uso                                   |
+| --------------- | ------------------------------------- |
+| HTML5           | Estructura de la aplicación           |
+| Tailwind CSS    | Estilos y diseño responsive           |
+| JavaScript ES6+ | Lógica del frontend                   |
+| Node.js         | Entorno de ejecución del backend      |
+| Express         | API REST                              |
+| CORS            | Comunicación entre frontend y backend |
+| Dotenv          | Variables de entorno                  |
+| Nodemon         | Desarrollo del servidor               |
+| Fetch API       | Consumo de la API desde el cliente    |
+| Vercel          | Despliegue del frontend               |
