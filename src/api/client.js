@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/v1/tasks';
+const API_URL = 'https://taskflow-project-ufrm.vercel.app/api/v1/tasks';
 
 export async function getTasks() {
   const response = await fetch(API_URL);
