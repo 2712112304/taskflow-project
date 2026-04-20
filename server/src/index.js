@@ -14,7 +14,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/tasks', taskRoutes);
 
-// Middleware global de manejo de errores
 app.use((err, req, res, next) => {
   if (err.message === 'NOT_FOUND') {
     return res.status(404).json({ error: 'La tarea no existe.' });
@@ -24,6 +23,4 @@ app.use((err, req, res, next) => {
   return res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
+module.exports = app;
