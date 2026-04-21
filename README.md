@@ -92,3 +92,17 @@ taskflow-project/
 | Nodemon         | Desarrollo del servidor               |
 | Fetch API       | Consumo de la API desde el cliente    |
 | Vercel          | Despliegue del frontend               |
+
+## Pruebas de errores con Thunder Client
+
+### Error 400
+Se realizó una petición `POST /api/v1/tasks` enviando un título vacío.  
+La API respondió con `400 Bad Request` y un mensaje indicando que el título es obligatorio y debe tener al menos 3 caracteres.
+
+### Error 404
+Se realizó una petición `DELETE /api/v1/tasks/123456789` con un identificador inexistente.  
+La API respondió con `404 Not Found` y el mensaje `La tarea no existe.`
+
+### Error 500
+Se creó temporalmente una ruta `/error-test` que lanza un error no controlado mediante `next(new Error('ERROR_TEST'))`.  
+La API respondió con `500 Internal Server Error` y un mensaje genérico: `Error interno del servidor`.
